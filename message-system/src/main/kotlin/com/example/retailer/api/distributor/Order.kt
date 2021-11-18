@@ -1,13 +1,11 @@
 package com.example.retailer.api.distributor
 
-import javax.persistence.Column
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.OneToMany
+import javax.persistence.*
 
 /**
  * Описание заказа
  */
+@Entity
 data class Order(
     /**
      * Уникальный идентификатор заказа на стороне ретейлера
