@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration
 class PublisherConfig {
     @Bean
     fun topic(): TopicExchange {
-        return TopicExchange("distributor_exchange", false, true)
+        return TopicExchange("distributor_exchange", true, false)
     }
 
     @Bean
