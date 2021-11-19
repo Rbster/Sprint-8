@@ -33,6 +33,7 @@ class OrderService {
         if (!distributorPublisher.placeOrder(data.order)) {
             throw IllegalStateException("Publishing failed")
         }
+        println("--------> Order Placed")
         return data.info
     }
 
