@@ -11,6 +11,7 @@ import org.mockserver.client.server.MockServerClient
 import org.mockserver.integration.ClientAndServer
 import org.mockserver.model.HttpRequest
 import org.mockserver.model.HttpResponse
+import ru.sberschool.hystrix.entity.Pokemon
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 
@@ -42,7 +43,7 @@ class SlowlyApiTest {
                 // задаем матчер для нашего запроса
                 HttpRequest.request()
                     .withMethod("GET")
-                    .withPath("/")
+                    .withPath("/api/v2/pokemon/1")
             )
             .respond(
                 // наш запрос попадает на таймаут
@@ -51,6 +52,6 @@ class SlowlyApiTest {
                     .withDelay(TimeUnit.SECONDS, 30) //
             )
         // expect
-        assertEquals("predefined data", client.getSomething().data)
+        assertEquals(Pokemon(listOf(), 0, listOf()), client.getPokemon(0))
     }
 }
