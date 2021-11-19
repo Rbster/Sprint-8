@@ -17,9 +17,14 @@ class OrderStorageImpl : OrderStorage {
 
 
     override fun createOrder(draftOrder: Order): PlaceOrderData {
+        println("--------> Before orderRepository.save")
         val order = orderRepository.save(draftOrder)
+        println("--------> After orderRepository.save")
+        println(order)
+
         val orderInfo = orderInfoRepository
             .save(OrderInfo(order.id!!, OrderStatus.SENT, ""))
+        println(orderInfo)
         return PlaceOrderData(order, orderInfo)
     }
 

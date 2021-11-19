@@ -27,7 +27,9 @@ class OrderService {
      * Возврат сохраненного заказа вместе с id
      */
     fun placeOrder(orderDraft: Order): OrderInfo {
+        println("--------> Before orderStorage.createOrder")
         val data = orderStorage.createOrder(orderDraft)
+        println("--------> After orderStorage.createOrder")
         if (!distributorPublisher.placeOrder(data.order)) {
             throw IllegalStateException("Publishing failed")
         }
