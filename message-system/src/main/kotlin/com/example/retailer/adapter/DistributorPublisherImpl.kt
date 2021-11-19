@@ -10,26 +10,22 @@ import org.springframework.beans.factory.annotation.Autowired
 class DistributorPublisherImpl : DistributorPublisher {
     @Autowired
     private lateinit var template: RabbitTemplate
-
     @Autowired
     private lateinit var topic: TopicExchange
-
     private val mapper = jacksonObjectMapper()
 
     override fun placeOrder(order: Order): Boolean {
-
         val orderJson = mapper.writeValueAsString(order)
-
-        if (order.id != null) {
+        return if (order.id != null) {
             template.convertAndSend(topic.name, "distributor.placeOrder.Rbster.${order.id}", orderJson) {
                 it.messageProperties.headers["Notify-Exchange"] = "distributor_exchange"
                 it.messageProperties.headers["Notify-RoutingKey"] = "retailer.Rbster"
                 it
             }
-            return true
+            true
         } else {
             println("order id == null !")
-            return false
+            false
         }
     }
 }

@@ -15,8 +15,6 @@ data class Order(
      * Уникальный идентификатор заказа на стороне ретейлера
      */
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @GenericGenerator(name="system-uuid", strategy = "uuid")
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")
     @Column(columnDefinition = "CHAR(32)")
@@ -39,6 +37,5 @@ data class Order(
      */
     @OneToMany
     @Cascade(CascadeType.ALL)
-//    @JoinColumn(name = "item_id", referencedColumnName = "id")
     val items: List<Item>
 )

@@ -10,22 +10,15 @@ import org.springframework.context.annotation.Configuration
 
 
 @Configuration
-class PublisherConfig {
+class MqConfig {
     @Bean
     fun topic(): TopicExchange {
         return TopicExchange("distributor_exchange", true, false)
     }
-
     @Bean
     fun autoDeleteRetailerQueue(): Queue {
         return Queue("retailer", false, false, true)
     }
-
-//    @Bean
-//    fun autoDeleteDistributorQueue(): Queue {
-//        return Queue("distributor", false, false, true)
-//    }
-
     @Bean
     fun bindingRetailer(
         topic: TopicExchange,
@@ -35,26 +28,14 @@ class PublisherConfig {
             .to(topic)
             .with("retailer.Rbster.#")
     }
-
-//    @Bean
-//    fun bindingDistributor(
-//        topic: TopicExchange,
-//        autoDeleteDistributorQueue: Queue
-//    ): Binding {
-//        return BindingBuilder.bind(autoDeleteDistributorQueue)
-//            .to(topic)
-//            .with("distributor.placeOrder.Rbster.#")
-//    }
     @Bean
     fun consumer(): RetailerConsumer {
         return RetailerConsumerImpl()
     }
-
     @Bean
     fun publisher(): DistributorPublisher {
         return DistributorPublisherImpl()
     }
-    
 }
 
 

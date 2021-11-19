@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 class RetailerConsumerImpl : RetailerConsumer {
     @Autowired
     private lateinit var orderService: OrderService
-
     private val mapper = jacksonObjectMapper()
-
 
     @RabbitListener(queues = ["retailer"])
     override fun receiveAndUpdate(incomingMsg: String) {
@@ -22,7 +20,5 @@ class RetailerConsumerImpl : RetailerConsumer {
         println("---------> updating order info")
         orderService.updateOrderInfo(orderInfo)
         println("---------> order info updated")
-
     }
-
 }
