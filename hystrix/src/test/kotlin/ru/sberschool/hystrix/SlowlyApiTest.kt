@@ -1,6 +1,7 @@
 package ru.sberschool.hystrix
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.netflix.hystrix.strategy.HystrixPlugins
 import feign.Request
 import feign.httpclient.ApacheHttpClient
 import feign.hystrix.HystrixFeign
