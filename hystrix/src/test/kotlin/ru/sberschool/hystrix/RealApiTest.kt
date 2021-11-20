@@ -54,7 +54,6 @@ class RealApiTest {
             64,
             listOf(Element("bulbasaur", "https://pokeapi.co/api/v2/pokemon-form/1/"))
         )
-
 //        val sentPokemonJson = mapper.writeValueAsString(sentByRealServerPokemon)
 //
 //        MockServerClient("127.0.0.1", 18080)
