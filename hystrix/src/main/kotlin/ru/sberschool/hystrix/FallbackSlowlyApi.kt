@@ -1,6 +1,5 @@
 package ru.sberschool.hystrix
 
-import feign.Param
 import ru.sberschool.hystrix.entity.Pokemon
 
 class FallbackSlowlyApi : SlowlyApi {
