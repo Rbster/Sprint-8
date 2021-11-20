@@ -1,11 +1,10 @@
 package ru.sberschool.hystrix
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import feign.Request
-import feign.RequestTemplate
 import feign.httpclient.ApacheHttpClient
 import feign.hystrix.HystrixFeign
 import feign.jackson.JacksonDecoder
-import feign.jackson.JacksonEncoder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -27,6 +26,7 @@ class SlowlyApiTest {
         .options(Request.Options(1, TimeUnit.SECONDS, 1, TimeUnit.SECONDS, true))
         .target(SlowlyApi::class.java, "http://127.0.0.1:18080", FallbackSlowlyApi())
     lateinit var mockServer: ClientAndServer
+    val mapper = ObjectMapper()
 
 
     @BeforeEach
@@ -63,16 +63,15 @@ class SlowlyApiTest {
     @Test
     fun `getSomething() should return actual data`() {
         // given
-        val responsePokemon = Pokemon(listOf(Ability(
+        val sentByMockServerPokemon = Pokemon(listOf(Ability(
             Element("kick", "https://pokemon.co/"),
             false,
             1)),
             100,
             listOf(Element("base", "https://pokemon.co/"))
             )
-        val pokemonRequest = RequestTemplate()
-//        JacksonEncoder().mapper
-            JacksonEncoder().encode(responsePokemon, Pokemon::class.java, pokemonRequest)
+        val sentPokemonJson = mapper.writeValueAsString(sentByMockServerPokemon)
+
         MockServerClient("127.0.0.1", 18080)
             .`when`(
                 // задаем матчер для нашего запроса
@@ -84,28 +83,12 @@ class SlowlyApiTest {
                 // наш запрос попадает на таймаут
                 HttpResponse.response()
                     .withStatusCode(200)
-                    .withBody(pokemonRequest.body())
-//                    .withDelay(TimeUnit.SECONDS, 30) //
-
+                    .withBody(sentPokemonJson)
             )
         // do
-        val receivedPokemon = client.getPokemon(1)
-        println(responsePokemon)
-        println(receivedPokemon)
+        val receivedByClientPokemon = client.getPokemon(1)
 
         // expect
-        assertEquals(responsePokemon.baseExperience, receivedPokemon.baseExperience)
-        assertEquals(responsePokemon.abilities.size, receivedPokemon.abilities.size)
-        for (i in 0 until responsePokemon.abilities.size) {
-            assertEquals(responsePokemon.abilities[i].ability, receivedPokemon.abilities[i].ability)
-            assertEquals(responsePokemon.abilities[i].slot, receivedPokemon.abilities[i].slot)
-            assertEquals(responsePokemon.abilities[i].hidden, receivedPokemon.abilities[i].hidden)
-        }
-        assertEquals(responsePokemon.forms.size, receivedPokemon.forms.size)
-        for (i in 0 until responsePokemon.forms.size) {
-            assertEquals(responsePokemon.forms[i].name, receivedPokemon.forms[i].name)
-            assertEquals(responsePokemon.forms[i].url, receivedPokemon.forms[i].url)
-        }
-
+        assertEquals(sentByMockServerPokemon, receivedByClientPokemon)
     }
 }

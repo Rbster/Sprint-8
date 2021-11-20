@@ -1,5 +1,6 @@
 package ru.sberschool.hystrix.entity
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 
 //data class Container(
@@ -17,11 +18,11 @@ data class Element(
 }
 
 data class Ability(
-//    @JsonProperty("")
+    @JsonProperty("ability")
     val ability: Element,
-//    @JsonProperty("is_hidden")
-    val hidden: Boolean,
-//    @JsonProperty("slot")
+    @JsonProperty("is_hidden")
+    val is_hidden: Boolean,
+    @JsonProperty("slot")
     val slot: Long
 ) {
     constructor() : this(Element(), true, 0)
